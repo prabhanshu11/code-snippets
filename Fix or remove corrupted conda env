@@ -1,0 +1,18 @@
+import subprocess, re, os
+
+cmd = 'conda remove --all --force-remove -n fastai'
+# The code will work if a package needs to be updated.
+while True:
+    process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    output, error = process.communicate()
+    # Extract the path to the corrupted file
+    pattern = r'corrupted file: (.+)\n\n'
+    match = re.search(pattern, output.decode())
+    if match:
+        corrupted_file_path = match.group(1)
+        print(f'Corrupted file: {corrupted_file_path}')
+        os.remove(corrupted_file_path)
+        print(f'Removed {corrupted_file_path}')
+    else:
+        print('Conda remove completed successfully.')
+        break
