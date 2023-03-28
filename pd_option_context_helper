@@ -1,0 +1,17 @@
+# The following pattern can be used to display all the rows in a jupyter environment. 
+# This basically reduces the extra context code that is needed to be written everytime
+# we try to display df using non-default options.
+# 
+
+def display_all_rows(func):
+    def wrapper(*args, **kwargs):
+        with pd.option_context('display.max_rows', None):
+            return func(*args, **kwargs)
+    return wrapper
+
+# modify the display function using the decorator
+all_ = display_all_rows(display)
+
+# Usage:
+# > all_(df)
+# > *prints all rows of the df*
